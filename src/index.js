@@ -1,18 +1,17 @@
 import './css/styles.css';
 const debounce = require('lodash.debounce');
-console.log(debounce);
 
 const DEBOUNCE_DELAY = 300;
 
 const inputEl = document.querySelector('#search-box');
-console.log(inputEl);
 const listEl = document.querySelector('.country-list');
-console.log(listEl);
+
+inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
+// 'https://restcountries.com/v2/all'
 
 // fetch function
-function fetchCountries() {
-  const BASE_URL = 'https://restcountries.com/v2/all';
-
+function fetchCountries(evt) {
+  const BASE_URL = `https://restcountries.com/v3.1/name/${evt}`;
   return fetch(
     `${BASE_URL}?fields=name,capital,population,flags,languages`
   ).then(resp => {
@@ -23,26 +22,35 @@ function fetchCountries() {
     return resp.json();
   });
 }
-fetchCountries().then(data => createMarkup(data));
 
 function createMarkup(arr) {
-  const markup = arr
+  let markup = arr
     .map(
       ({ name, capital, population, flags, languages }) => `<li>
-    <h2>${name}</h2>
+    <h2>${name.official}</h2>
     <p>${capital}</p>
     <p>${population}</p>
-    <img src = ${flags} alt = "National Flag of ${name}>
-    <p>${languages}</p>
+    <img src = ${flags.svg} alt = "National Flag of ${name} width = 320px>
+    <p>${languages.name}</p>
     </li>`
     )
     .join('');
 
-  listEl.insertAdjacentHTML('beforeend', markup);
+  listEl.innerHTML = markup;
 }
 
-// name.official - повна назва країни
-// capital - столиця
-// population - населення
-// flags.svg - посилання на зображення прапора
-// languages - масив мов
+function onInput() {
+  inputValue = this.value;
+  console.log(inputValue);
+  if (!this.value) {
+    listEl.innerHTML = '';
+    return;
+  }
+  fetchCountries(inputValue.trim()).then(data => {
+    if (data.length > 10) {
+      alert('qweqweqwe');
+    } else {
+      createMarkup(data);
+    }
+  });
+}
