@@ -1,5 +1,6 @@
-import './css/styles.css';
+import '././css/styles.css';
 import Notiflix from 'notiflix';
+import fetchCountries from './fetchCountries';
 
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -7,19 +8,6 @@ const inputEl = document.querySelector('#search-box');
 const listEl = document.querySelector('.country-list');
 
 inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
-
-function fetchCountries(evt) {
-  const BASE_URL = `https://restcountries.com/v3.1/name/${evt}`;
-  return fetch(
-    `${BASE_URL}?fields=name,capital,population,flags,languages`
-  ).then(resp => {
-    if (!resp.ok) {
-      throw new Error(console.log('by'));
-    }
-
-    return resp.json();
-  });
-}
 
 function onInput() {
   inputValue = this.value.trim();
@@ -45,15 +33,23 @@ function onInput() {
 
 function createMarkup(arr) {
   let markup = arr
-    .map(
-      ({ name, capital, population, flags, languages }) => `<li>
+    .map(({ name, capital, population, flags, languages }) => {
+      if (arr.length < 2) {
+        return `<li>
     <h2>${name.official}</h2>
-    <p>${capital}</p>
-    <p>${population}</p>
+    <p>Capital: ${capital}</p>
+    <p>Population: ${population}</p>
     <img src = ${flags.svg} alt = "National Flag of ${name} width = 320px>
-    <p>${languages.name}</p>
-    </li>`
-    )
+    <p>languages: ${languages.name}</p>
+    </li>`;
+      }
+      return `<li>
+    <h2>${name.official}</h2>
+   
+    <img src = ${flags.svg} alt = "National Flag of ${name} width = 320px>
+    
+    </li>`;
+    })
     .join('');
 
   listEl.innerHTML = markup;
