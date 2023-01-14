@@ -1,4 +1,4 @@
-import '././css/styles.css';
+import './css/styles.css';
 import Notiflix from 'notiflix';
 import fetchCountries from './fetchCountries';
 
@@ -33,23 +33,29 @@ function onInput() {
 
 function createMarkup(arr) {
   let markup = arr
-    .map(({ name, capital, population, flags, languages }) => {
-      if (arr.length < 2) {
-        return `<li>
-    <h2>${name.official}</h2>
+    .map(
+      ({
+        name: { official },
+        capital,
+        population,
+        flags: { svg },
+        languages,
+      }) => {
+        if (arr.length === 1) {
+          return `<li>
+    <h2>${official}</h2>
     <p>Capital: ${capital}</p>
     <p>Population: ${population}</p>
-    <img src = ${flags.svg} alt = "National Flag of ${name} width = 320px>
-    <p>languages: ${languages.name}</p>
+    <p>languages: ${languages}</p>
+    <img src = ${svg} width = 320px/>
+    </li>`;
+        }
+        return `<li>
+    <h2>${official}</h2>
+    <img src = ${svg} width = 320px/>
     </li>`;
       }
-      return `<li>
-    <h2>${name.official}</h2>
-   
-    <img src = ${flags.svg} alt = "National Flag of ${name} width = 320px>
-    
-    </li>`;
-    })
+    )
     .join('');
 
   listEl.innerHTML = markup;
