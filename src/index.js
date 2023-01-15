@@ -1,6 +1,6 @@
-import './css/styles.css';
+import '././css/styles.css';
 import Notiflix from 'notiflix';
-import fetchCountries from './fetchCountries';
+import fetchCountries from '././fetchCountries';
 
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -16,6 +16,7 @@ function onInput() {
     listEl.innerHTML = '';
     return;
   }
+
   fetchCountries(inputValue)
     .then(data => {
       if (data.length > 10) {
@@ -41,12 +42,12 @@ function createMarkup(arr) {
         flags: { svg },
         languages,
       }) => {
-        if (arr.length === 1) {
+        if (arr.length < 2) {
           return `<li>
     <h2>${official}</h2>
     <p>Capital: ${capital}</p>
     <p>Population: ${population}</p>
-    <p>languages: ${languages}</p>
+    <p>languages: ${Object.values(languages).join(', ')}</p>
     <img src = ${svg} width = 320px/>
     </li>`;
         }
@@ -60,3 +61,5 @@ function createMarkup(arr) {
 
   listEl.innerHTML = markup;
 }
+
+listEl.style.listStyle = 'none';
