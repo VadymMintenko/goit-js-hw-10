@@ -1,6 +1,6 @@
-import '././css/styles.css';
+import './css/styles.css';
 import Notiflix from 'notiflix';
-import fetchCountries from '././fetchCountries';
+import fetchCountries from './fetchCountries';
 
 const debounce = require('lodash.debounce');
 const DEBOUNCE_DELAY = 300;
@@ -9,8 +9,8 @@ const listEl = document.querySelector('.country-list');
 
 inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
-function onInput() {
-  inputValue = this.value.trim();
+function onInput(evt) {
+  inputValue = evt.target.value.trim();
 
   if (!inputValue) {
     listEl.innerHTML = '';
@@ -33,7 +33,7 @@ function onInput() {
 }
 
 function createMarkup(arr) {
-  let markup = arr
+  const markup = arr
     .map(
       ({
         name: { official },
