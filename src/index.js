@@ -10,7 +10,7 @@ const listEl = document.querySelector('.country-list');
 inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
 
 function onInput(evt) {
-  inputValue = evt.target.value.trim();
+  const inputValue = evt.target.value.trim();
 
   if (!inputValue) {
     listEl.innerHTML = '';
